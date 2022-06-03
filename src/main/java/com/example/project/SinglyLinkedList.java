@@ -1,6 +1,6 @@
 package com.example.project;
 
-public class SinglyLinkedList<T> {
+public class SinglyLinkedList<T extends Comparable <T>> {
     private Node<T> first; // Primero nodo de la lista
     private int size; // Tamano de la lista
 
@@ -100,17 +100,90 @@ public class SinglyLinkedList<T> {
 
     // Elimina aquellos nodos de la lista que esten duplicados
     public void deleteDuplicates() {
-
+        Node <T> auxi=first;
+    	while(auxi!=null) {
+    		Node <T> temp=auxi;
+    		while(temp.getNext()!=null) {
+    			if(auxi.getValue().compareTo(temp.getNext().getValue())==0) {
+    				//Se eliminara el sgte elemento de temp ya que está duplicado
+    				temp.setNext(temp.getNext().getNext());
+    			}
+    			else {
+	    			//Avanzamos al sgte elemento
+	    			temp=temp.getNext();
+    			}
+    		}
+    		//Avanzamos al sgte elemento
+    		auxi=auxi.getNext();
+    	}
     }
 
     // Inserta un nuevo nodo en una posicion especifica de la lista
     public void insertNth(T data, int position) {
-
+        //Verificamos que position es valido
+    	if(position>=0 && position<size+1) {
+    		//Si se quiere insertar al final
+    		if(position==size) {
+    			//Utilizamos el método ya hecho
+    			addLast(data);
+    		}
+    		//Sino si se quiere insertar al inicio
+    		else if(position==0) {
+    			//Utilizamos el método ya hecho
+    			addFirst(data);
+    		}
+    		//Sino cumple ninguno de los 2 casos anteriores
+    		else {
+    			//Entonces simplemente recorreremos la lista enlazada hasta llegar al elemento en position-1
+	    		Node <T> temp=first;
+	        	for(int i=0;i<position-1;i++){
+	        		temp=temp.getNext();
+	        	}
+	        	//Y simplemente hacemos que el sgte elemento de temp sea el que se quiere insertar
+	        	temp.setNext(new Node <T>(data,temp.getNext()));
+	        	//Además al crearlo con new Node <T>, le decimos que su sgte elemento es 
+	        	//el que ERA el sgte elemento de temp
+	        	size++;
+        	}
+    	}
+    	//Sino es válido ,entonces simplimente se imprime fuera de rango y no se modifica nada
+    	else{
+    		System.out.println("Fuera de rango.");
+    		return;
+    	}
     }
 
     // Elimina el nodo de una posicion especifica de la lista
     public void deleteNth(int position) {
-
+        //Verificamos que position es valido
+    	if(position>=0 && position<size) {
+    		//Si se quiere borrar el elemento final
+    		if(position==size) {
+    			//Utilizamos el método ya hecho
+    			removeLast();
+    		}
+    		//Sino si se quiere borrar el elemento del inicio
+    		else if(position==0) {
+    			//Utilizamos el método ya hecho
+    			removeFirst();
+    		}
+    		//Sino cumple ninguno de los 2 casos anteriores
+    		else {
+    			//Entonces simplemente recorreremos la lista enlazada hasta llegar al elemento en position-1
+    			Node <T> temp=first;
+            	for(int i=0;i<position-1;i++){
+            		temp=temp.getNext();
+            	}
+            	//Y simplemente hacemos que el sgte elemento de temp sea el sgte del sgte
+            	temp.setNext(temp.getNext().getNext());
+            	size--;		
+    		}		
+    	}
+    	//Sino es válido ,entonces simplimente se imprime fuera de rango y no se modifica nada
+    	else {
+    		System.out.println("Fuera de rango.");
+    		return;
+    	}
     }
 
     public static void main(final String[] args) {
